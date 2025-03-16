@@ -2,10 +2,11 @@
 
 import React from "react";
 import Image from "next/image";
+import LetterGlitch from "./ui/LetterGlitch";
 
 const techStackItems = [
   {
-    quote: "/icons8-react-24.png", // Replace with actual path to tech logos
+    quote: "/icons8-react-24.png",
     name: "React",
   },
   {
@@ -32,17 +33,66 @@ const techStackItems = [
     quote: "/icons8-tailwind-css-144.png",
     name: "Tailwind CSS",
   },
+  {
+    quote: "/icons8-docker-144.png",
+    name: "Docker",
+  },
+  {
+    quote: "/icons8-bootstrap-144.png",
+    name: "Bootstrap",
+  },
+  {
+    quote: "/icons8-postgresql-96.png",
+    name: "PostgreSQL",
+  },
+  {
+    quote: "/icons8-mongo-db-96.png",
+    name: "MongoDB",
+  },
+  {
+    quote: "/icons8-angular-96.png",
+    name: "Angular",
+  },
+  {
+    quote: "/icons8-nodejs-144.png",
+    name: "Node.js",
+  },
 ];
 
 export function TechStack() {
   return (
-    <section className="py-20 relative overflow-hidden" >
-      <div className="container mx-auto px-4" data-aos="fade-up">
+    <section className="py-8 relative overflow-hidden">
+      {/* LetterGlitch background */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <LetterGlitch
+          glitchSpeed={50}
+          centerVignette={true}
+          outerVignette={false}
+          smooth={true}
+          glitchColors={[
+            "#00ff41", // Matrix green
+            "#00b4d8", // Cyber blue
+            "#0a192f", // Dark navy
+            "#7928ca", // Electric purple
+            "#38ef7d", // Toxic green
+            "#12100e", // Hacker black
+            "#00fffb", // Terminal cyan
+          ]}
+        />
+      </div>
+      
+      {/* Left vignette shadow */}
+      <div className="absolute left-0 top-0 bottom-0 w-60 md:w-60 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none opacity-90"></div>
+      
+      {/* Right vignette shadow */}
+      <div className="absolute right-0 top-0 bottom-0 w-60 md:w-60 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none opacity-90"></div>
+      
+      <div className="container mx-auto px-4 relative z-20" data-aos="fade-up">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Tech Stack</h2>
+          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Tech Stack</h2>
         </div>
-
-        <div className="h-[300px] rounded-md flex flex-col antialiased items-center justify-center relative overflow-hidden">
+        
+        <div className="h-[200px] rounded-md flex flex-col antialiased items-center justify-center relative overflow-hidden">
           <CustomInfiniteMovingCards items={techStackItems} direction="right" speed="fast" />
         </div>
       </div>
@@ -133,13 +183,13 @@ const CustomInfiniteMovingCards = ({
     >
       <ul
         ref={scrollerRef}
-        className={`flex min-w-full shrink-0 gap-4 sm:gap-6 md:gap-8 py-4 w-max flex-nowrap ${
+        className={`flex min-w-full shrink-0 gap-4 sm:gap-6 md:gap-8 py-2 w-max flex-nowrap ${
           start && "animate-scroll"
         } ${pauseOnHover && "hover:[animation-play-state:paused]"}`}
       >
         {items.map((item, idx) => (
           <li
-            className="w-[140px] h-[140px] sm:w-[150px] sm:h-[150px] md:w-[160px] md:h-[160px] flex flex-col items-center justify-center rounded-2xl border border-slate-700 px-3 py-4 bg-white dark:bg-slate-900"
+            className="w-[140px] h-[140px] sm:w-[150px] sm:h-[150px] md:w-[160px] md:h-[160px] flex flex-col items-center justify-center rounded-2xl border border-slate-700 px-3 py-4 backdrop-blur-sm bg-opacity-70 bg-white dark:bg-opacity-90 dark:bg-slate-900"
             key={`${item.name}-${idx}`}
           >
             <div className="flex items-center justify-center h-24 w-24 mb-3">
@@ -161,4 +211,4 @@ const CustomInfiniteMovingCards = ({
       </ul>
     </div>
   );
-};
+}
