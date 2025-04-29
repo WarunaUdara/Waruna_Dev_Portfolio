@@ -1,5 +1,6 @@
 "use client";
-import { Hero } from "@/components/Hero";
+import Footer from "@/components/Footer";
+import HeroNew from "@/components/HeroNew";
 import { TechStack } from "@/components/TechStack";
 import { FloatingNav } from "@/components/ui/FloatingNav";
 import { navItemsData } from "@/data/data";
@@ -19,8 +20,9 @@ export default function Home() {
   return (
     <div className="">
       <FloatingNav navItems={navItemsData} />
-      <Hero/>
+      <HeroNew/>
       <TechStack/>
+      <Footer/>
     </div>
   );
 }
