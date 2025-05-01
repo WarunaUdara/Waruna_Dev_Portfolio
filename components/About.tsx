@@ -3,8 +3,6 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Aurora from "./ui/Aurora";
-import { TextGenerateEffect } from "./ui/TextGenerateEffect";
-import TextPressure from "./ui/TextPressure";
 import { motion } from "framer-motion";
 
 const About = () => {
@@ -50,11 +48,12 @@ const About = () => {
                       "linear-gradient(to right, #8a2be2, #ff69b4)",
                       "linear-gradient(to right, #7928ca, #ff0080)",
                       "linear-gradient(to right, #4338ca, #c026d3)",
-                      "linear-gradient(to right, #8a2be2, #ff69b4)"
+                      "linear-gradient(to right, #8a2be2, #ff69b4)",
+                      
                     ]
                   }}
                   transition={{
-                    duration: 3,
+                    duration: 5,
                     repeat: Infinity,
                     repeatType: "reverse"
                   }}

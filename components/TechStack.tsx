@@ -123,6 +123,7 @@ const CustomInfiniteMovingCards = ({
 
   React.useEffect(() => {
     addAnimation();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   
   function addAnimation() {
