@@ -65,7 +65,7 @@ const About = () => {
 
             <div className="space-y-6 text-gray-300">
               <p className="text-lg leading-relaxed">
-                I&apos;m Waruna Udara, a proactive full-stack developer
+                I&apos;m Waruna Udara Sampath, a proactive full-stack developer
                 passionate about creating dynamic web experiences. From frontend
                 to backend, I thrive on solving complex problems with clean,
                 efficient code. My expertise spans Java, Spring Boot, React,

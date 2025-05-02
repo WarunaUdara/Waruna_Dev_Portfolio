@@ -12,7 +12,7 @@ const HeroNew = () => {
       {/* Aurora background that fills the entire section */}
       <div className="absolute inset-0 z-0">
         <Aurora
-          colorStops={["#FFFFFF", "#1e293b", "#4338ca"]}
+          colorStops={["#FFFFFF", "#4c0080", "#4c0080"]}
           blend={0.5}
           amplitude={1.5}
           speed={0.3}

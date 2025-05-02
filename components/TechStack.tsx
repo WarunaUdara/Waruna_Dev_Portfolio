@@ -1,215 +1,282 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import LetterGlitch from "./ui/LetterGlitch";
+import { motion, useScroll, useSpring, useMotionValueEvent, useTransform, useMotionValue } from "framer-motion";
 
 const techStackItems = [
-  {
-    quote: "/icons8-react-24.png",
-    name: "React",
-  },
-  {
-    quote: "/icons8-spring-boot-48.png",
-    name: "Spring Boot",
-  },
-  {
-    quote: "/icons8-java-144.png",
-    name: "Java",
-  },
-  {
-    quote: "/aws.png",
-    name: "AWS",
-  },
-  {
-    quote: "/ts.png",
-    name: "TypeScript",
-  },
-  {
-    quote: "/icons8-nextjs-144.png",
-    name: "Next.js",
-  },
-  {
-    quote: "/icons8-tailwind-css-144.png",
-    name: "Tailwind CSS",
-  },
-  {
-    quote: "/icons8-docker-144.png",
-    name: "Docker",
-  },
-  {
-    quote: "/icons8-bootstrap-144.png",
-    name: "Bootstrap",
-  },
-  {
-    quote: "/icons8-postgresql-96.png",
-    name: "PostgreSQL",
-  },
-  {
-    quote: "/icons8-mongo-db-96.png",
-    name: "MongoDB",
-  },
-  {
-    quote: "/icons8-angular-96.png",
-    name: "Angular",
-  },
-  {
-    quote: "/icons8-nodejs-144.png",
-    name: "Node.js",
-  },
+  // Languages & Core
+  { quote: "/icons8-java-144.png", name: "Java" },
+  { quote: "/icons8-spring-boot-48.png", name: "Spring Boot" },
+  { quote: "/icons8-python-144.png", name: "Python" },
+  { quote: "/icons8-c-144.png", name: "C" },
+  { quote: "/icons8-javascript-144.png", name: "JavaScript" },
+  { quote: "/ts.png", name: "TypeScript" },
+  { quote: "/icons8-html5-144.png", name: "HTML" },
+  { quote: "/icons8-css3-144.png", name: "CSS" },
+  
+  // Frontend
+  { quote: "/icons8-react-24.png", name: "React.js" },
+  { quote: "/icons8-nextjs-144.png", name: "Next.js" },
+  { quote: "/icons8-angular-96.png", name: "Angular" },
+  { quote: "/icons8-bootstrap-144.png", name: "Bootstrap" },
+  { quote: "/icons8-tailwind-css-144.png", name: "Tailwind CSS" },
+  { quote: "/icons8-figma-96.png", name: "Figma" },
+  
+  // Backend
+  { quote: "/hibernate.png", name: "Hibernate" },
+  { quote: "/icons8-apache-kafka-64.png", name: "Kafka" },
+  { quote: "/icons8-swagger-144.png", name: "Swagger" },
+  
+  // Database
+  { quote: "/icons8-postgresql-96.png", name: "PostgreSQL" },
+  { quote: "/icons8-mysql-144.png", name: "MySQL" },
+  
+  // DevOps & Tools
+  { quote: "/icons8-docker-144.png", name: "Docker" },
+  { quote: "/aws.png", name: "AWS" },
+  { quote: "/icons8-postman-inc-96.png", name: "Postman" },
+  { quote: "/icons8-git-144.png", name: "Git" },
+  { quote: "/icons8-github-50.png", name: "GitHub" },
+  { quote: "/icons8-gitlab-96.png", name: "GitLab" },
+  { quote: "/icons8-vs-code-96.png", name: "VS Code" },
+  { quote: "/icons8-intellij-idea-96.png", name: "IntelliJ IDEA" },
+  { quote: "/vercel.png", name: "Vercel" },
+];
+
+// Group by category for rows
+const categories = [
+  ["Java", "Spring Boot", "Python", "C", "JavaScript", "TypeScript"],
+  ["React.js", "Next.js", "Angular", "Bootstrap", "Tailwind CSS", "HTML", "CSS"],
+  ["PostgreSQL", "MySQL", "Hibernate", "Kafka", "Swagger"],
+  ["Git", "GitHub", "GitLab", "Docker", "AWS", "Postman"],
+  ["VS Code", "IntelliJ IDEA", "Vercel", "Figma"]
 ];
 
 export function TechStack() {
+  const { scrollY } = useScroll();
+  const lastScrollY = useRef(0);
+  const sectionRef = useRef(null);
+  const flowerRef = useRef(null);
+  const [sectionInView, setSectionInView] = useState(false);
+  
+  // Track scroll direction explicitly
+  const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(null);
+  
+  // MotionValue for rotation with independent control
+  const rotationValue = useMotionValue(0);
+  
+  // Create a spring animation for smooth rotation
+  const smoothRotation = useSpring(rotationValue, {
+    stiffness: 15,     // Lower value for more fluid rotation
+    damping: 30,       // Higher value for less oscillation
+    mass: 3,           // Higher mass for more inertial feeling
+    restDelta: 0.001   // Small value for precision
+  });
+
+  // Update rotation based on scroll direction
+  useMotionValueEvent(scrollY, "change", (current) => {
+    if (sectionRef.current && sectionInView) {
+      const prevScrollY = lastScrollY.current;
+      const direction = current > prevScrollY ? "down" : "up";
+      
+      // Update direction state for potential UI feedback
+      setScrollDirection(direction);
+      
+      // Calculate rotation increment based on scroll amount and direction
+      const scrollDelta = Math.abs(current - prevScrollY);
+      // Scale factor for rotation (adjust for sensitivity)
+      const rotationFactor = 0.5; 
+      
+      // Apply rotation in correct direction: clockwise for down, counter-clockwise for up
+      if (direction === "down") {
+        rotationValue.set(rotationValue.get() + (scrollDelta * rotationFactor));
+      } else {
+        rotationValue.set(rotationValue.get() - (scrollDelta * rotationFactor));
+      }
+      
+      lastScrollY.current = current;
+    }
+  });
+
+  // Track when the section is in view
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setSectionInView(entry.isIntersecting);
+      },
+      { threshold: 0.1, rootMargin: "100px" } // Increased margin to start animation earlier
+    );
+    
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+    
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, []);
+  
+  // Reset scroll tracking when section comes into view
+  useEffect(() => {
+    if (sectionInView) {
+      lastScrollY.current = window.scrollY;
+    }
+  }, [sectionInView]);
+
   return (
-    <section className="py-8 relative overflow-hidden">
-      {/* LetterGlitch background */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+    <section 
+      id="tech-stack" 
+      ref={sectionRef} 
+      className="py-5 pt-16 md:pt-15 relative overflow-hidden"
+    >
+      {/* Dark background with subtle texture - z-index lowered */}
+      <div className="absolute inset-0 bg-black z-0 opacity-95">
+        <div className="absolute inset-0 bg-dot-thick-neutral-800/20 pointer-events-none"></div>
+      </div>
+      
+      {/* LetterGlitch background with enhanced styling - z-index lowered */}
+      <div className="absolute inset-0 z-1 pointer-events-none opacity-10">
         <LetterGlitch
-          glitchSpeed={50}
+          glitchSpeed={40}
           centerVignette={true}
           outerVignette={false}
           smooth={true}
           glitchColors={[
             "#00ff41", // Matrix green
             "#00b4d8", // Cyber blue
-            "#0a192f", // Dark navy
             "#7928ca", // Electric purple
-            "#38ef7d", // Toxic green
-            "#12100e", // Hacker black
-            "#00fffb", // Terminal cyan
           ]}
         />
       </div>
       
-      {/* Left vignette shadow */}
-      <div className="absolute left-0 top-0 bottom-0 w-60 md:w-60 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none opacity-90"></div>
-      
-      {/* Right vignette shadow */}
-      <div className="absolute right-0 top-0 bottom-0 w-60 md:w-60 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none opacity-90"></div>
-      
-      <div className="container mx-auto px-4 relative z-20" data-aos="fade-up">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4">Tech Stack</h2>
+      {/* Container with improved animations */}
+      <div 
+        className="container mx-auto px-4 relative z-10 max-w-5xl" 
+        data-aos="fade-up"
+      >
+        <div className="text-center mb-16 relative">
+          {/* Flower with increased z-index to appear above masked layers */}
+          <div className="absolute inset-0 flex items-center justify-center overflow-visible z-[5]">
+            <motion.div
+              ref={flowerRef}
+              style={{ 
+                rotate: smoothRotation,
+                width: "350px",
+                height: "350px",
+                position: "absolute",
+                willChange: "transform",
+              }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1,
+                transition: { duration: 0.8, ease: "easeOut" }
+              }}
+            >
+              <Image 
+                src="/flower.png" 
+                alt="" 
+                fill
+                className="object-contain opacity-35"
+                priority
+              />
+            </motion.div>
+          </div>
+
+          {/* Enhanced text animation with higher z-index to stay on top */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.2 }}
+            className="relative z-[10] py-12"
+          >
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="text-gray-400 text-sm uppercase tracking-wider mb-3 font-medium"
+            >
+              I CONSTANTLY TRY TO IMPROVE
+            </motion.p>
+            <motion.h2
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.6 }}
+              className="text-5xl sm:text-6xl font-bold text-white"
+            >
+              My Tech Stack
+            </motion.h2>
+          </motion.div>
         </div>
         
-        <div className="h-[200px] rounded-md flex flex-col antialiased items-center justify-center relative overflow-hidden">
-          <CustomInfiniteMovingCards items={techStackItems} direction="right" speed="fast" />
+        {/* Tech stack categories with enhanced animations */}
+        <div className="space-y-3">
+          {categories.map((rowTechs, rowIndex) => (
+            <motion.div 
+              key={`row-${rowIndex}`} 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ 
+                duration: 0.5, 
+                delay: rowIndex * 0.15,
+                ease: "easeOut"
+              }}
+              className="flex flex-wrap justify-center gap-3 md:gap-4"
+            >
+              {rowTechs.map((techName, itemIndex) => {
+                const tech = techStackItems.find(item => item.name === techName);
+                if (!tech) return null;
+                
+                return (
+                  <motion.div
+                    key={tech.name}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ 
+                      duration: 0.4,
+                      delay: rowIndex * 0.1 + (itemIndex * 0.05),
+                      ease: "easeOut"
+                    }}
+                    whileHover={{ 
+                      scale: 1.05, 
+                      boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)"
+                    }}
+                    className="transition-all duration-300"
+                  >
+                    <motion.div 
+                      className="flex items-center gap-2 bg-[#111111] border border-[#333333] rounded-full py-2 px-4 h-10"
+                      whileHover={{ 
+                        backgroundColor: "rgba(30, 30, 30, 0.8)",
+                        borderColor: "rgba(80, 80, 80, 0.8)"
+                      }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <div className="flex-shrink-0 w-5 h-5 relative">
+                        <Image 
+                          src={tech.quote} 
+                          alt={`${tech.name} icon`}
+                          width={20}
+                          height={20}
+                          className="object-contain"
+                        />
+                      </div>
+                      <span className="text-sm text-gray-200 font-medium">
+                        {tech.name}
+                      </span>
+                    </motion.div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>
-  );
-}
-
-// Custom version of InfiniteMovingCards for tech stack display
-const CustomInfiniteMovingCards = ({
-  items,
-  direction = "left",
-  speed = "fast",
-  pauseOnHover = true,
-  className,
-}: {
-  items: {
-    quote: string; // Using quote field for image path
-    name: string;
-  }[];
-  direction?: "left" | "right";
-  speed?: "fast" | "normal" | "slow";
-  pauseOnHover?: boolean;
-  className?: string;
-}) => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const scrollerRef = React.useRef<HTMLUListElement>(null);
-  const [start, setStart] = React.useState(false);
-
-  React.useEffect(() => {
-    addAnimation();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  
-  function addAnimation() {
-    if (containerRef.current && scrollerRef.current) {
-      const scrollerContent = Array.from(scrollerRef.current.children);
-
-      scrollerContent.forEach((item) => {
-        const duplicatedItem = item.cloneNode(true);
-        if (scrollerRef.current) {
-          scrollerRef.current.appendChild(duplicatedItem);
-        }
-      });
-
-      getDirection();
-      getSpeed();
-      setStart(true);
-    }
-  }
-
-  const getDirection = () => {
-    if (containerRef.current) {
-      if (direction === "left") {
-        containerRef.current.style.setProperty(
-          "--animation-direction",
-          "forwards"
-        );
-      } else {
-        containerRef.current.style.setProperty(
-          "--animation-direction",
-          "reverse"
-        );
-      }
-    }
-  };
-
-  const getSpeed = () => {
-    if (containerRef.current) {
-      if (speed === "fast") {
-        containerRef.current.style.setProperty("--animation-duration", "10s");
-      } else if (speed === "normal") {
-        containerRef.current.style.setProperty("--animation-duration", "20s");
-      } else {
-        containerRef.current.style.setProperty("--animation-duration", "30s");
-      }
-    }
-  };
-
-  return (
-    <div
-      ref={containerRef}
-      className={`
-        scroller relative z-20 w-full max-w-full overflow-hidden 
-        [mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]
-        sm:[mask-image:linear-gradient(to_right,transparent,white_15%,white_85%,transparent)]
-        md:[mask-image:linear-gradient(to_right,transparent,white_20%,white_80%,transparent)]
-        ${className}
-      `}
-    >
-      <ul
-        ref={scrollerRef}
-        className={`flex min-w-full shrink-0 gap-4 sm:gap-6 md:gap-8 py-2 w-max flex-nowrap ${
-          start && "animate-scroll"
-        } ${pauseOnHover && "hover:[animation-play-state:paused]"}`}
-      >
-        {items.map((item, idx) => (
-          <li
-            className="w-[140px] h-[140px] sm:w-[150px] sm:h-[150px] md:w-[160px] md:h-[160px] flex flex-col items-center justify-center rounded-2xl border border-slate-700 px-3 py-4 backdrop-blur-sm bg-opacity-70 bg-white dark:bg-opacity-90 dark:bg-slate-900"
-            key={`${item.name}-${idx}`}
-          >
-            <div className="flex items-center justify-center h-24 w-24 mb-3">
-              <Image 
-                src={item.quote}
-                alt={`${item.name} logo`}
-                width={60} 
-                height={60}
-                className="object-contain" 
-              />
-            </div>
-            <div className="text-center">
-              <p className="text-sm sm:text-base md:text-lg font-semibold text-gray-800 dark:text-gray-200">
-                {item.name}
-              </p>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
