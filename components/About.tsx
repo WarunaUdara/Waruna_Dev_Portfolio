@@ -86,7 +86,7 @@ const About = () => {
             {/* Social links */}
             <div className="mt-8 flex space-x-4">
               <Link
-                href="/"
+                href="https://www.linkedin.com/in/waruna-udara/"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <svg
@@ -100,7 +100,7 @@ const About = () => {
                 </svg>
               </Link>
               <Link
-                href="/"
+                href="https://github.com/WarunaUdara"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <svg
@@ -114,7 +114,7 @@ const About = () => {
                 </svg>
               </Link>
               <Link
-                href="/"
+                href="mailto:warunaudarasam2003@gmail.com"
                 className="text-gray-400 hover:text-white transition-colors"
               >
                 <svg
