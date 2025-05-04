@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "set \"NEXT_TELEMETRY_DISABLED=1\" && next build",
+    "build": "set \"NEXT_TELEMETRY_DISABLED=1\" && rimraf .next && next build",
     "start": "next start",
     "lint": "next lint"
   },
@@ -32,6 +32,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.2.3",
     "postcss": "^8",
+    "rimraf": "^5.0.10",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

@@ -3,7 +3,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import LetterGlitch from "./ui/LetterGlitch";
-import { motion, useScroll, useSpring, useMotionValueEvent, useTransform, useMotionValue } from "framer-motion";
+import { motion, useScroll, useSpring, useMotionValueEvent, useMotionValue } from "framer-motion";
+import ClickSpark from "./ui/ClickSpark";
 
 const techStackItems = [
   // Languages & Core
@@ -61,9 +62,6 @@ export function TechStack() {
   const flowerRef = useRef(null);
   const [sectionInView, setSectionInView] = useState(false);
   
-  // Track scroll direction explicitly
-  const [scrollDirection, setScrollDirection] = useState<"up" | "down" | null>(null);
-  
   // MotionValue for rotation with independent control
   const rotationValue = useMotionValue(0);
   
@@ -79,22 +77,14 @@ export function TechStack() {
   useMotionValueEvent(scrollY, "change", (current) => {
     if (sectionRef.current && sectionInView) {
       const prevScrollY = lastScrollY.current;
-      const direction = current > prevScrollY ? "down" : "up";
       
-      // Update direction state for potential UI feedback
-      setScrollDirection(direction);
-      
-      // Calculate rotation increment based on scroll amount and direction
+      // Calculate rotation increment based on scroll amount
       const scrollDelta = Math.abs(current - prevScrollY);
       // Scale factor for rotation (adjust for sensitivity)
       const rotationFactor = 0.5; 
       
-      // Apply rotation in correct direction: clockwise for down, counter-clockwise for up
-      if (direction === "down") {
-        rotationValue.set(rotationValue.get() + (scrollDelta * rotationFactor));
-      } else {
-        rotationValue.set(rotationValue.get() - (scrollDelta * rotationFactor));
-      }
+      // Apply rotation based on scroll direction
+      rotationValue.set(rotationValue.get() + (current > prevScrollY ? scrollDelta * rotationFactor : -scrollDelta * rotationFactor));
       
       lastScrollY.current = current;
     }
@@ -109,13 +99,17 @@ export function TechStack() {
       { threshold: 0.1, rootMargin: "100px" } // Increased margin to start animation earlier
     );
     
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    // Store ref value in a variable inside the effect
+    const currentRef = sectionRef.current;
+    
+    if (currentRef) {
+      observer.observe(currentRef);
     }
     
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
+      // Use the variable in the cleanup function instead of accessing .current
+      if (currentRef) {
+        observer.unobserve(currentRef);
       }
     };
   }, []);
@@ -128,6 +122,7 @@ export function TechStack() {
   }, [sectionInView]);
 
   return (
+    
     <section 
       id="tech-stack" 
       ref={sectionRef} 
@@ -249,27 +244,36 @@ export function TechStack() {
                     }}
                     className="transition-all duration-300"
                   >
-                    <motion.div 
-                      className="flex items-center gap-2 bg-[#111111] border border-[#333333] rounded-full py-2 px-4 h-10"
-                      whileHover={{ 
-                        backgroundColor: "rgba(30, 30, 30, 0.8)",
-                        borderColor: "rgba(80, 80, 80, 0.8)"
-                      }}
-                      transition={{ duration: 0.2 }}
+                    <ClickSpark
+                      sparkColor="#00c6ff"
+                      sparkSize={8}
+                      sparkRadius={25}
+                      sparkCount={10}
+                      extraScale={1.5}
+                      duration={500}
                     >
-                      <div className="flex-shrink-0 w-5 h-5 relative">
-                        <Image 
-                          src={tech.quote} 
-                          alt={`${tech.name} icon`}
-                          width={20}
-                          height={20}
-                          className="object-contain"
-                        />
-                      </div>
-                      <span className="text-sm text-gray-200 font-medium">
-                        {tech.name}
-                      </span>
-                    </motion.div>
+                      <motion.div 
+                        className="flex items-center gap-2 bg-[#111111] border border-[#333333] rounded-full py-2 px-4 h-10"
+                        whileHover={{ 
+                          backgroundColor: "rgba(30, 30, 30, 0.8)",
+                          borderColor: "rgba(80, 80, 80, 0.8)"
+                        }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <div className="flex-shrink-0 w-5 h-5 relative">
+                          <Image 
+                            src={tech.quote} 
+                            alt={`${tech.name} icon`}
+                            width={20}
+                            height={20}
+                            className="object-contain"
+                          />
+                        </div>
+                        <span className="text-sm text-gray-200 font-medium">
+                          {tech.name}
+                        </span>
+                      </motion.div>
+                    </ClickSpark>
                   </motion.div>
                 );
               })}
@@ -278,5 +282,6 @@ export function TechStack() {
         </div>
       </div>
     </section>
+    
   );
 }
