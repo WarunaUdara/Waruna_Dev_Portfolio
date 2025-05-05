@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { cn } from "@/lib/utils";
 import React, { useMemo } from "react";
@@ -7,10 +8,12 @@ import {
   IconFileBroken,
   IconSignature,
   IconTableColumn,
+  IconWorld,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { DynamicIconCloud } from "./DynamicIconCloud";
+import { Globe } from "./magicui/Globe";
 
 // Define the tech stack icons to use in the cloud
 const techIcons = [
@@ -36,18 +39,20 @@ const techIcons = [
 
 export function BentoGridImpl() {
   return (
-    <BentoGrid className="max-w-4xl mx-auto md:auto-rows-[20rem]">
-      {items.map((item, i) => (
-        <BentoGridItem
-          key={i}
-          title={item.title}
-          description={item.description}
-          header={item.header}
-          className={cn("[&>p:text-lg]", item.className)}
-          icon={item.icon}
-        />
-      ))}
-    </BentoGrid>
+    <div className="container mx-auto px-4 sm:px-8 mb-8">
+      <BentoGrid className="w-full mx-auto md:auto-rows-[20rem]">
+        {items.map((item, i) => (
+          <BentoGridItem
+            key={i}
+            title={item.title}
+            description={item.description}
+            header={item.header}
+            className={cn("[&>p:text-lg]", item.className)}
+            icon={item.icon}
+          />
+        ))}
+      </BentoGrid>
+    </div>
   );
 }
 
@@ -243,6 +248,43 @@ const TechStackCloud = () => {
   );
 };
 
+const InteractiveGlobe = () => {
+  return (
+    <div className="flex flex-col w-full h-full dark:bg-black bg-black rounded-lg overflow-hidden relative">
+      {/* Top text */}
+      <div className="absolute top-0 left-0 right-0 z-10 p-5">
+        <h3 className="text-lg md:text-xl text-center bg-gradient-to-r from-blue-200 to-blue-400 bg-clip-text text-transparent font-medium">
+          I&apos;m very flexible with time zone communications
+        </h3>
+      </div>
+
+      {/* This container properly sizes and positions the globe */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative w-full h-full scale-125 translate-y-4">
+          <Globe />
+        </div>
+      </div>
+
+      {/* Bottom location indicator */}
+      <div className="absolute bottom-4 left-5 z-10 flex flex-col">
+        <div className="flex items-center gap-2 mb-1">
+          <svg viewBox="0 0 24 24" className="w-5 h-5 text-blue-400 fill-current">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+          </svg>
+          <span className="text-gray-300 text-sm">Remote</span>
+        </div>
+        <h4 className="text-gray-100 text-xl font-medium">Sri Lanka</h4>
+        <div className="flex items-center gap-1 mt-2 text-blue-400 text-sm">
+          <span>Connect now</span>
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const items = [
   {
     title: "Tech Enthusiast",
@@ -256,15 +298,11 @@ const items = [
     icon: <IconCode className="h-4 w-4 text-neutral-500" />,
   },
   {
-    title: "Automated Proofreading",
-    description: (
-      <span className="text-sm">
-        Let AI handle the proofreading of your documents.
-      </span>
-    ),
-    header: <SkeletonTwo />,
+    title: "", // Empty title
+    description: "", // Empty description
+    header: <InteractiveGlobe />,
     className: "md:col-span-1",
-    icon: <IconFileBroken className="h-4 w-4 text-neutral-500" />,
+    icon: null, // Remove icon
   },
   {
     title: "Contextual Suggestions",
