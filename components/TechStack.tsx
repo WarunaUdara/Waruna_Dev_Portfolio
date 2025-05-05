@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion, useScroll } from "framer-motion";
+import { motion } from "framer-motion";
 import Aurora from "./ui/Aurora";
 
 // Only include technologies with icons in the public folder
@@ -55,15 +56,14 @@ const categories = [
 ];
 
 export function TechStack() {
-  const { scrollY } = useScroll();
   const sectionRef = useRef(null);
-  const [sectionInView, setSectionInView] = useState(false);
   
   // Track when the section is in view
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        setSectionInView(entry.isIntersecting);
+        // We're tracking the section but not using sectionInView state anymore
+        // Just need the observer to trigger animations when in view
       },
       { threshold: 0.1, rootMargin: "100px" }
     );
