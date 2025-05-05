@@ -8,6 +8,7 @@ import { navItemsData } from "@/data/data";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
+import { Projects } from "@/components/Projects";
 
 export default function Home() {
   useEffect(() => {
@@ -23,6 +24,7 @@ export default function Home() {
       <FloatingNav navItems={navItemsData} />
       <HeroNew/>
       <About/>
+      <Projects/>
       <TechStack/>
       <Footer/>
     </div>
