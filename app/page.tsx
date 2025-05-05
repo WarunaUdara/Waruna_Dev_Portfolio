@@ -9,6 +9,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useEffect } from "react";
 import { Projects } from "@/components/Projects";
+import { BentoGridImpl } from "@/components/BentoGridImpl";
 
 export default function Home() {
   useEffect(() => {
@@ -24,6 +25,7 @@ export default function Home() {
       <FloatingNav navItems={navItemsData} />
       <HeroNew/>
       <About/>
+      <BentoGridImpl/>
       <Projects/>
       <TechStack/>
       <Footer/>

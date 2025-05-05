@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
+import Aurora from "./ui/Aurora";
 
 const projects = [
   {
@@ -115,8 +116,8 @@ export function Projects() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const projectRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  // Function to handle scroll and update active project
-  const handleScroll = () => {
+  // Function to handle scroll and update active project using useCallback
+  const handleScroll = useCallback(() => {
     if (!sectionRef.current) return;
 
     const scrollPosition = window.scrollY;
@@ -138,7 +139,7 @@ export function Projects() {
         setActiveProject(projectIndex);
       }
     }
-  };
+  }, [activeProject]);
 
   // Set up scroll event listener
   useEffect(() => {
@@ -146,19 +147,29 @@ export function Projects() {
     handleScroll(); // Initial check
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [activeProject]);
+  }, [handleScroll]);
 
   return (
-    <section data-aos="fade-up" data-aos-duration="1000" id="projects" className="relative w-full py-24 bg-black" ref={sectionRef}>
-      <div className="absolute inset-0 bg-dot-thick-neutral-800/20 pointer-events-none"></div>
+    <section id="projects" className="relative w-full py-24" ref={sectionRef}>
+      {/* Black background with Aurora effect */}
+      <div className="absolute inset-0 bg-black"></div>
+      <div className="absolute inset-0" style={{ zIndex: 1 }}>
+        <Aurora
+          colorStops={["#000000", "#000000", "#000000"]}
+          blend={0.3}
+          amplitude={0.8}
+          speed={0.2}
+        />
+      </div>
+      <div className="absolute inset-0 bg-dot-thick-neutral-800/20 pointer-events-none" style={{ zIndex: 2 }}></div>
 
-      <div className="container mx-auto px-4 mb-16 text-center">
+      <div data-aos="fade-up" data-aos-duration="1000" className="container mx-auto px-4 mb-16 text-center relative" style={{ zIndex: 10 }}>
         <p className="text-gray-400 text-sm uppercase tracking-wider mb-3 font-medium">MY RECENT WORK</p>
         <h2 className="text-5xl sm:text-6xl font-bold text-white mb-8">Projects</h2>
       </div>
 
-      {/* Desktop Layout - Fixed text and scrolling images with perfect alignment */}
-      <div className="hidden lg:block relative">
+      {/* Desktop Layout */}
+      <div data-aos="fade-up" data-aos-duration="1000" className="hidden lg:block relative" style={{ zIndex: 10 }}>
         {/* Fixed project details container */}
         <div className="sticky top-32 h-[calc(100vh-200px)] overflow-hidden">
           <div className="container mx-auto px-4 h-full">
@@ -275,12 +286,15 @@ export function Projects() {
       </div>
 
       {/* Mobile Layout - Regular scrolling card style */}
-      <div className="lg:hidden">
+      <div className="lg:hidden relative z-10">
         <div className="container mx-auto px-4">
           {projects.map((project, index) => (
             <div
               key={index}
               className="mb-16 pb-16 border-b border-gray-800 last:border-0"
+              data-aos="fade-up" 
+              data-aos-duration="1000"
+              data-aos-delay={index * 100}
             >
               <div
                 className="relative aspect-[16/9] rounded-lg overflow-hidden shadow-xl mb-8"

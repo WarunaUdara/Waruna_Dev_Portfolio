@@ -8,7 +8,10 @@ import Link from "next/link";
 
 const HeroNew = () => {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
+    <div
+      className="relative min-h-screen w-full overflow-hidden"
+      style={{ backgroundColor: "#000000", background: "#000000 !important" }}
+    >
       {/* Aurora background that fills the entire section */}
       <div className="absolute inset-0 z-0">
         <Aurora
@@ -20,7 +23,7 @@ const HeroNew = () => {
       </div>
 
       {/* Optional semi-transparent overlay to improve text contrast */}
-      <div className="absolute inset-0 z-[1] bg-black/30"></div>
+      <div className="absolute inset-0 z-[1] bg-black/50"></div>
 
       {/* Content positioned above the Aurora background */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen">
@@ -32,7 +35,7 @@ const HeroNew = () => {
           <div className="text-shadow text-shadow-black">
             <TextGenerateEffect
               words="Turning Ideas into Seamless Digital Experiences."
-              className="mb-4"
+              className="mb-4 text-white"
             />
           </div>
 
@@ -51,11 +54,7 @@ const HeroNew = () => {
             style={{ opacity: 0.6 }}
           >
             <span className="bg-clip-text text-transparent bg-gradient-to-tl from-slate-50 to-slate-400">
-            Hello, I&apos;m 
-            
-              Waruna Udara 
-              
-              a Full Stack Developer
+              Hello, I&apos;m Waruna Udara a Full Stack Developer
             </span>
           </div>
 
@@ -93,7 +92,7 @@ const HeroNew = () => {
                 </StarBorder>
               </Link>
             </Magnet>
-            
+
             <Magnet
               padding={40}
               magnetStrength={10}

@@ -5,6 +5,7 @@ import Image from "next/image";
 import LetterGlitch from "./ui/LetterGlitch";
 import { motion, useScroll, useSpring, useMotionValueEvent, useMotionValue } from "framer-motion";
 import ClickSpark from "./ui/ClickSpark";
+import Aurora from "./ui/Aurora";
 
 const techStackItems = [
   // Languages & Core
@@ -122,19 +123,29 @@ export function TechStack() {
   }, [sectionInView]);
 
   return (
-    
     <section 
       id="tech-stack" 
       ref={sectionRef} 
       className="py-5 pt-16 md:pt-15 relative overflow-hidden"
     >
-      {/* Dark background with subtle texture - z-index lowered */}
-      <div className="absolute inset-0 bg-black z-0 opacity-95">
-        <div className="absolute inset-0 bg-dot-thick-neutral-800/20 pointer-events-none"></div>
+      {/* Black background base */}
+      <div className="absolute inset-0 bg-black z-0"></div>
+      
+      {/* Aurora effect overlay */}
+      <div className="absolute inset-0 z-1 opacity-80">
+        <Aurora
+          colorStops={["#000000", "#000000", "#000000"]}
+          blend={0.3}
+          amplitude={0.8}
+          speed={0.2}
+        />
       </div>
       
-      {/* LetterGlitch background with enhanced styling - z-index lowered */}
-      <div className="absolute inset-0 z-1 pointer-events-none opacity-10">
+      {/* Dot pattern overlay */}
+      <div className="absolute inset-0 bg-dot-thick-neutral-800/20 pointer-events-none z-2"></div>
+      
+      {/* LetterGlitch background with enhanced styling - z-index updated */}
+      <div className="absolute inset-0 z-3 pointer-events-none opacity-10">
         <LetterGlitch
           glitchSpeed={40}
           centerVignette={true}
@@ -282,6 +293,5 @@ export function TechStack() {
         </div>
       </div>
     </section>
-    
   );
 }
