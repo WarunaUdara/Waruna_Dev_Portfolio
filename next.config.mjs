@@ -14,7 +14,13 @@ const nextConfig = {
   },
   // Improve image optimization
   images: {
-    remotePatterns: [],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'pbs.twimg.com',
+        pathname: '/**',
+      },
+    ],
   },
   // Disable x-powered-by header for security
   poweredByHeader: false,
