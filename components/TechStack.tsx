@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import LetterGlitch from "./ui/LetterGlitch";
 import { motion, useScroll, useSpring, useMotionValueEvent, useMotionValue } from "framer-motion";
-import ClickSpark from "./ui/ClickSpark";
 import Aurora from "./ui/Aurora";
 import { DynamicIconCloud } from "./DynamicIconCloud";
 
