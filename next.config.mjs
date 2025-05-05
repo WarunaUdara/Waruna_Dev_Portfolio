@@ -24,7 +24,13 @@ const nextConfig = {
   },
   // Disable x-powered-by header for security
   poweredByHeader: false,
-  // Note: swcMinify option has been removed as it's no longer supported in Next.js 15.2.3
+  // Optimize build performance
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production' ? {
+      exclude: ['error', 'warn'],
+    } : false,
+  },
 }
 
 export default nextConfig;

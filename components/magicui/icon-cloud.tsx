@@ -40,7 +40,7 @@ export function IconCloud({ icons, images }: IconCloudProps) {
     duration: number;
   } | null>(null);
   const animationFrameRef = useRef<number | undefined>(undefined);
-  const rotationRef = useRef(rotation);
+  const rotationRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const iconCanvasesRef = useRef<HTMLCanvasElement[]>([]);
   const imagesLoadedRef = useRef<boolean[]>([]);
 

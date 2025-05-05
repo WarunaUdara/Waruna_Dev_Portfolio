@@ -9,8 +9,8 @@ import {
   IconTableColumn,
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
-import { IconCloud } from "./magicui/icon-cloud";
 import Image from "next/image";
+import { DynamicIconCloud } from "./DynamicIconCloud";
 
 // Define the tech stack icons to use in the cloud
 const techIcons = [
@@ -222,7 +222,7 @@ const TechStackCloud = () => {
       }}
     >
       <div className="absolute inset-0 flex items-center justify-center">
-        <IconCloud images={techIcons} />
+        <DynamicIconCloud images={techIcons} />
       </div>
       {/* Subtle gradient overlay for better visual integration */}
       <div className="absolute inset-0 bg-gradient-to-br from-transparent via-black/10 to-black/30 pointer-events-none"></div>

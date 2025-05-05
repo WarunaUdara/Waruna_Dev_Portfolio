@@ -6,6 +6,7 @@ import LetterGlitch from "./ui/LetterGlitch";
 import { motion, useScroll, useSpring, useMotionValueEvent, useMotionValue } from "framer-motion";
 import ClickSpark from "./ui/ClickSpark";
 import Aurora from "./ui/Aurora";
+import { DynamicIconCloud } from "./DynamicIconCloud";
 
 const techStackItems = [
   // Languages & Core
@@ -220,77 +221,7 @@ export function TechStack() {
         </div>
         
         {/* Tech stack categories with enhanced animations */}
-        <div className="space-y-3">
-          {categories.map((rowTechs, rowIndex) => (
-            <motion.div 
-              key={`row-${rowIndex}`} 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ 
-                duration: 0.5, 
-                delay: rowIndex * 0.15,
-                ease: "easeOut"
-              }}
-              className="flex flex-wrap justify-center gap-3 md:gap-4"
-            >
-              {rowTechs.map((techName, itemIndex) => {
-                const tech = techStackItems.find(item => item.name === techName);
-                if (!tech) return null;
-                
-                return (
-                  <motion.div
-                    key={tech.name}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ 
-                      duration: 0.4,
-                      delay: rowIndex * 0.1 + (itemIndex * 0.05),
-                      ease: "easeOut"
-                    }}
-                    whileHover={{ 
-                      scale: 1.05, 
-                      boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)"
-                    }}
-                    className="transition-all duration-300"
-                  >
-                    <ClickSpark
-                      sparkColor="#00c6ff"
-                      sparkSize={8}
-                      sparkRadius={25}
-                      sparkCount={10}
-                      extraScale={1.5}
-                      duration={500}
-                    >
-                      <motion.div 
-                        className="flex items-center gap-2 bg-[#111111] border border-[#333333] rounded-full py-2 px-4 h-10"
-                        whileHover={{ 
-                          backgroundColor: "rgba(30, 30, 30, 0.8)",
-                          borderColor: "rgba(80, 80, 80, 0.8)"
-                        }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <div className="flex-shrink-0 w-5 h-5 relative">
-                          <Image 
-                            src={tech.quote} 
-                            alt={`${tech.name} icon`}
-                            width={20}
-                            height={20}
-                            className="object-contain"
-                          />
-                        </div>
-                        <span className="text-sm text-gray-200 font-medium">
-                          {tech.name}
-                        </span>
-                      </motion.div>
-                    </ClickSpark>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          ))}
-        </div>
+        <DynamicIconCloud items={techStackItems} categories={categories} />
       </div>
     </section>
   );
