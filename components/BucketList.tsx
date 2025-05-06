@@ -3,7 +3,6 @@
 import React from "react";
 import { AuroraText } from "./magicui/AuroraText";
 import Aurora from "./ui/Aurora";
-import Image from "next/image";
 import { motion } from "framer-motion";
 
 // Interface for bucket list item

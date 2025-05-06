@@ -46,7 +46,7 @@ export function Globe({
   className?: string;
   config?: COBEOptions;
 }) {
-  let phi = 0;
+  const phiRef = useRef(0);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -118,8 +118,8 @@ export function Globe({
         width: dimensions.width * 2,
         height: dimensions.height * 2,
         onRender: (state) => {
-          if (!pointerInteracting.current) phi += 0.005;
-          state.phi = phi + rs.get();
+          if (!pointerInteracting.current) phiRef.current += 0.005;
+          state.phi = phiRef.current + rs.get();
           state.width = dimensions.width * 2;
           state.height = dimensions.height * 2;
         },
