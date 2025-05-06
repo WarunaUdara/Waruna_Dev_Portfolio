@@ -33,16 +33,7 @@ const Footer = () => {
             
             {/* Social Icons */}
             <div className="flex space-x-4 mt-4">
-              <SocialLinksModal>
-                <div className="px-4 py-2 bg-purple-600 hover:bg-purple-700 transition-colors rounded-full text-white text-sm flex items-center gap-2 cursor-pointer">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-                    <rect x="2" y="9" width="4" height="12"></rect>
-                    <circle cx="4" cy="4" r="2"></circle>
-                  </svg>
-                  Connect with me
-                </div>
-              </SocialLinksModal>
+              
             </div>
           </div>
 
@@ -64,14 +55,14 @@ const Footer = () => {
             <div>
               <h3 className="text-lg font-medium mb-3 text-white">The Website</h3>
               <ul className="space-y-2">
-                <li><Link href="/guest-book" className="text-gray-400 hover:text-white transition-colors">Guest Book</Link></li>
+                
                 <li><Link href="/bucket-list" className="text-gray-400 hover:text-white transition-colors">Bucket List</Link></li>
                 <li>
                   <SocialLinksModal className="p-0 text-left text-gray-400 hover:text-white transition-colors">
-                    <span>Links</span>
+                    <span>Contact Links</span>
                   </SocialLinksModal>
                 </li>
-                <li><Link href="/book-call" className="text-gray-400 hover:text-white transition-colors">Book a call</Link></li>
+                
               </ul>
             </div>
           </div>

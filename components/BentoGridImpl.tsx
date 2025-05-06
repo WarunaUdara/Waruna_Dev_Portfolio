@@ -71,10 +71,10 @@ const TechStackCloud = () => {
         <DynamicIconCloud images={techIcons} />
       </div>
       
-      {/* Content shown on hover */}
-      <div className="absolute inset-0 opacity-0 group-hover/bento:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end p-4 pointer-events-none">
+      {/* Content shown on hover - removed pointer-events-none from parent container */}
+      <div className="absolute inset-0 opacity-0 group-hover/bento:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end p-4">
         <div 
-          className="bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full text-sm text-white flex items-center gap-2 mb-3 cursor-pointer pointer-events-auto transform -translate-y-4 group-hover/bento:translate-y-0 transition-transform duration-300"
+          className="bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full text-sm text-white flex items-center gap-2 mb-3 cursor-pointer transform -translate-y-4 group-hover/bento:translate-y-0 transition-transform duration-300 z-20"
           onClick={(e) => {
             e.stopPropagation();
             document.getElementById('tech-stack')?.scrollIntoView({ behavior: 'smooth' });
@@ -192,27 +192,36 @@ const ProjectShowcase = () => {
             fill
             className="object-cover absolute inset-0 opacity-30 hover:opacity-50 transition-opacity duration-300"
           />
-          <div className="relative z-10 bg-black/40 backdrop-blur-md p-6 rounded-2xl border border-white/10 max-w-xs mx-auto">
-            <h3 className="text-xl font-medium text-white mb-2">Recent Projects</h3>
-            <p className="text-sm text-gray-200 mb-4">
-              Explore my portfolio of web and application development projects
-            </p>
-            <div className="flex gap-3">
-              <a 
-                href="https://github.com/WarunaUdara" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="bg-white/10 hover:bg-white/20 text-white text-xs rounded-full px-3 py-1.5 flex items-center gap-1"
-              >
-                <IconBrandGithub className="w-4 h-4" />
-                <span>GitHub</span>
-              </a>
-              <button 
-                onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-                className="bg-blue-500/80 hover:bg-blue-500 text-white text-xs rounded-full px-3 py-1.5"
-              >
-                View All
-              </button>
+          
+          {/* Content container with improved structure */}
+          <div className="relative z-10 flex flex-col justify-between h-full w-full">
+            {/* Title and description at the top */}
+            <div className="bg-black/40 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-white/10 max-w-xs mx-auto mt-8">
+              <h3 className="text-xl font-medium text-white mb-2">Recent Projects</h3>
+              <p className="text-sm text-gray-200">
+                Explore my portfolio of web and application development projects
+              </p>
+            </div>
+            
+            {/* Buttons positioned at the bottom but move up on hover */}
+            <div className="w-full flex justify-center">
+              <div className="flex gap-3 mt-auto mb-6 transform translate-y-4 group-hover/bento:translate-y-[-16px] transition-transform duration-300">
+                <a 
+                  href="https://github.com/WarunaUdara" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="bg-white/10 hover:bg-white/20 text-white text-xs rounded-full px-3 py-1.5 flex items-center gap-1"
+                >
+                  <IconBrandGithub className="w-4 h-4" />
+                  <span>GitHub</span>
+                </a>
+                <button 
+                  onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
+                  className="bg-blue-500/80 hover:bg-blue-500 text-white text-xs rounded-full px-3 py-1.5"
+                >
+                  View All
+                </button>
+              </div>
             </div>
           </div>
         </div>
