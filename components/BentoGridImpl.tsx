@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { cn } from "@/lib/utils";
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react"; // Added useState, useEffect
 import { BentoGrid, BentoGridItem } from "../components/ui/BentoGrid";
 import {
   IconBrandGithub,
@@ -67,14 +67,14 @@ const TechStackCloud = () => {
     <div 
       className="flex flex-col w-full h-full overflow-hidden relative cursor-pointer min-h-[230px] bg-gradient-to-br from-blue-50/5 to-purple-100/5 dark:from-blue-900/10 dark:to-purple-900/10"
     >
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0 flex items-center justify-center transform scale-125"> {/* Increased scale */}
         <DynamicIconCloud images={techIcons} />
       </div>
       
       {/* Content shown on hover - removed pointer-events-none from parent container */}
-      <div className="absolute inset-0 opacity-0 group-hover/bento:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end p-4">
+      <div className="absolute inset-0 opacity-0 group-hover/bento:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center p-4"> {/* Centered button */}
         <div 
-          className="bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full text-sm text-white flex items-center gap-2 mb-3 cursor-pointer transform -translate-y-4 group-hover/bento:translate-y-0 transition-transform duration-300 z-20"
+          className="bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full text-sm text-white flex items-center gap-2 cursor-pointer transform group-hover/bento:translate-y-0 transition-transform duration-300 z-20" // Removed mb-3 and -translate-y-4
           onClick={(e) => {
             e.stopPropagation();
             document.getElementById('tech-stack')?.scrollIntoView({ behavior: 'smooth' });
@@ -96,6 +96,26 @@ const TechStackCloud = () => {
 };
 
 const InteractiveGlobe = () => {
+  const [currentTime, setCurrentTime] = useState("");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const timeInColombo = new Date().toLocaleString("en-US", {
+        timeZone: "Asia/Colombo",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: true,
+      });
+      setCurrentTime(timeInColombo);
+    };
+
+    updateTime(); // Initial call to set time immediately
+    const intervalId = setInterval(updateTime, 1000); // Update time every second
+
+    return () => clearInterval(intervalId); // Cleanup interval on component unmount
+  }, []);
+
   return (
     <div className="flex flex-col w-full h-full rounded-3xl overflow-hidden relative bg-gradient-to-b from-blue-950/40 via-blue-900/30 to-black/60">
       {/* Container with proper aspect ratio for all device sizes */}
@@ -131,8 +151,17 @@ const InteractiveGlobe = () => {
           </div>
           <div className="bg-black/40 backdrop-blur-md rounded-lg px-2 py-1 mb-1">
             <h4 className="text-gray-100 text-xs sm:text-sm font-medium">Sri Lanka</h4>
+            {currentTime && (
+              <p className="text-gray-300 text-[10px] sm:text-xs mt-0.5">{currentTime}</p>
+            )}
           </div>
-          <div className="bg-black/40 hover:bg-black/50 backdrop-blur-md rounded-lg px-2 py-1 cursor-pointer transition-colors flex items-center gap-1">
+          <div 
+            className="bg-black/40 hover:bg-black/50 backdrop-blur-md rounded-lg px-2 py-1 cursor-pointer transition-colors flex items-center gap-1"
+            onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}
+          >
             <span className="text-blue-400 text-[10px] sm:text-xs">Connect now</span>
             <svg className="w-2 h-2 sm:w-3 sm:h-3 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -145,8 +174,24 @@ const InteractiveGlobe = () => {
 };
 
 const BlogShowcase = () => {
+  const handleBlogClick = () => {
+    if (window.innerWidth < 768) {
+      window.open('https://medium.com/@warunaudarasampath', '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
-    <div className="flex flex-col w-full h-full rounded-3xl overflow-hidden relative bg-gradient-to-br from-gray-900/70 to-gray-800/70">
+    <div 
+      className="flex flex-col w-full h-full rounded-3xl overflow-hidden relative bg-gradient-to-br from-gray-900/70 to-gray-800/70 cursor-pointer md:cursor-default"
+      onClick={handleBlogClick}
+      role="button" // Added for accessibility since it's clickable
+      tabIndex={0} // Added for accessibility
+      onKeyDown={(e) => { // Added for accessibility
+        if ((e.key === 'Enter' || e.key === ' ') && window.innerWidth < 768) {
+          handleBlogClick();
+        }
+      }}
+    >
       <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
         <div className="relative w-full h-full flex items-center justify-center p-6">
           {/* Medium logo overlay */}
@@ -163,13 +208,14 @@ const BlogShowcase = () => {
             </p>
             
             <a 
-              href="https://medium.com/@warunaudarasampath" 
-              target="_blank" 
+              href="https://medium.com/@warunaudarasampath"
+              target="_blank"
               rel="noopener noreferrer"
-              className="bg-white hover:bg-gray-100 text-gray-800 px-6 py-3 rounded-full font-medium flex items-center gap-2 transition-colors duration-300"
+              onClick={(e) => e.stopPropagation()} // Prevent card click handler when button is clicked on desktop
+              className="bg-white hover:bg-gray-100 text-gray-800 px-6 py-3 rounded-full font-medium items-center gap-2 transition-all duration-300 ease-in-out opacity-0 transform scale-95 group-hover/bento:opacity-100 group-hover/bento:scale-100 hidden md:flex"
             >
               <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M13 12h7l-4 4m0-8l4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M13 12h7l-4 4m0-8l4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 <path d="M14 12H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
               <span>Read on Medium</span>
@@ -205,7 +251,7 @@ const ProjectShowcase = () => {
             
             {/* Buttons positioned at the bottom but move up on hover */}
             <div className="w-full flex justify-center">
-              <div className="flex gap-3 mt-auto mb-6 transform translate-y-4 group-hover/bento:translate-y-[-16px] transition-transform duration-300">
+              <div className="flex gap-3 mt-auto mb-6 transform opacity-0 translate-y-10 group-hover/bento:opacity-100 group-hover/bento:translate-y-[-16px] transition-all duration-300 ease-in-out">
                 <a 
                   href="https://github.com/WarunaUdara" 
                   target="_blank" 
