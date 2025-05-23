@@ -123,7 +123,7 @@ const InteractiveGlobe = () => {
         {/* Top text overlay - improved mobile spacing with better background for readability */}
         <div className="absolute top-0 left-0 right-0 z-30 p-2 sm:p-4">
           <div className="bg-black/30 backdrop-blur-md rounded-lg py-1.5 px-2 mx-auto inline-block">
-            <h3 className="text-[10px] sm:text-sm md:text-base text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-blue-400 font-medium rounded-3xl">
+            <h3 className="text-xs sm:text-base md:text-lg text-center bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-blue-400 font-bold rounded-3xl"> {/* Updated font size and weight */}
               I&apos;m very flexible with time zone communications
             </h3>
           </div>
@@ -139,20 +139,20 @@ const InteractiveGlobe = () => {
           </div>
         </div>
 
-        {/* Bottom location indicator - improved positioning and spacing for mobile */}
-        <div className="absolute bottom-1 left-1 sm:bottom-3 sm:left-3 z-30 flex flex-col max-w-[120px] sm:max-w-none">
+        {/* Bottom location indicator - Adjusted for mobile to prevent overlap with BentoGridItem title/desc */}
+        <div className="absolute bottom-16 left-2 sm:bottom-8 sm:left-3 z-30 flex flex-col max-w-[110px] sm:max-w-none"> {/* Increased bottom, adjusted max-width for mobile */}
           <div className="flex items-center gap-1 mb-1">
             <div className="bg-black/40 backdrop-blur-md rounded-full p-1 flex items-center gap-1">
               <svg viewBox="0 0 24 24" className="w-3 h-3 text-blue-400 fill-current flex-shrink-0">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5-2.5-1.12-2.5-2.5-2.5z" />
               </svg>
-              <span className="text-gray-300 text-[10px] sm:text-xs whitespace-nowrap">Remote</span>
+              <span className="text-gray-300 text-[9px] sm:text-xs whitespace-nowrap">Remote</span> {/* Reduced mobile font size */}
             </div>
           </div>
           <div className="bg-black/40 backdrop-blur-md rounded-lg px-2 py-1 mb-1">
-            <h4 className="text-gray-100 text-xs sm:text-sm font-medium">Sri Lanka</h4>
+            <h4 className="text-gray-100 text-[9px] sm:text-sm font-medium">Sri Lanka</h4> {/* Reduced mobile font size */}
             {currentTime && (
-              <p className="text-gray-300 text-[10px] sm:text-xs mt-0.5">{currentTime}</p>
+              <p className="text-gray-300 text-[9px] sm:text-xs mt-0.5">{currentTime}</p> {/* Reduced mobile font size */}
             )}
           </div>
           <div 
@@ -162,7 +162,7 @@ const InteractiveGlobe = () => {
             tabIndex={0}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); }}
           >
-            <span className="text-blue-400 text-[10px] sm:text-xs">Connect now</span>
+            <span className="text-blue-400 text-[9px] sm:text-xs">Connect now</span> {/* Reduced mobile font size */}
             <svg className="w-2 h-2 sm:w-3 sm:h-3 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
             </svg>
@@ -309,16 +309,6 @@ const items = [
     header: <BlogShowcase />,
     className: "md:row-span-1 lg:col-span-1",
     icon: <IconBrandGithub className="h-4 w-4 text-white/80" />,
-  },
-  {
-    title: "Projects",
-    description: (
-      <span>
-        Explore my portfolio of projects showcasing a range of technical skills and creative solutions.
-      </span>
-    ),
-    header: <ProjectShowcase />,
-    className: "md:row-span-1 lg:col-span-1",
-    icon: <IconTableColumn className="h-4 w-4 text-white/80" />,
   }
+  // Removed the "Projects" card object that was here
 ];

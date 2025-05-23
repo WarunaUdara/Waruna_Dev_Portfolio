@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
-const MOVEMENT_DAMPING = 1400;
+const MOVEMENT_DAMPING = 400; // Adjusted for more responsive rotation
 
 const GLOBE_CONFIG: COBEOptions = {
   width: 800,
