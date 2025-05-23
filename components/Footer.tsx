@@ -43,7 +43,7 @@ const Footer = () => {
               <h3 className="text-lg font-medium mb-3 text-white">General</h3>
               <ul className="space-y-2">
                 <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
-                <li><Link href="/projects" className="text-gray-400 hover:text-white transition-colors">Projects</Link></li>
+                <li><Link href="#projects" className="text-gray-400 hover:text-white transition-colors">Projects</Link></li> {/* Changed href to #projects */}
                 <li>
                   <SocialLinksModal className="p-0 text-left text-gray-400 hover:text-white transition-colors">
                     <span>Blog</span>
