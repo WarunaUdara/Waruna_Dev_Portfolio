@@ -153,7 +153,7 @@ export function Projects() {
     <section id="projects" className="relative w-full py-24" ref={sectionRef}>
       {/* Black background with Aurora effect */}
       <div className="absolute inset-0 bg-black"></div>
-      <div className="absolute inset-0" style={{ zIndex: 1 }}>
+      <div className="absolute inset-0 opacity-30" style={{ zIndex: 1 }}> {/* Added opacity-30 */}
         <Aurora
           colorStops={["#000000", "#000000", "#000000"]}
           blend={0.3}
@@ -161,7 +161,7 @@ export function Projects() {
           speed={0.2}
         />
       </div>
-      <div className="absolute inset-0 bg-dot-thick-neutral-800/20 pointer-events-none" style={{ zIndex: 2 }}></div>
+      <div className="absolute inset-0 bg-dot-thick-black/10 pointer-events-none" style={{ zIndex: 2 }}></div> {/* Changed to black/10 */}
 
       <div data-aos="fade-up" data-aos-duration="1000" className="container mx-auto px-4 mb-16 text-center relative" style={{ zIndex: 10 }}>
         <p className="text-gray-400 text-sm uppercase tracking-wider mb-3 font-medium">MY RECENT WORK</p>
