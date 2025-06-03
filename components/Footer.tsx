@@ -21,7 +21,7 @@ const Footer = () => {
       
       {/* Content container with higher z-index */}
       <div className="relative" style={{ zIndex: 10 }}>
-        <hr className="h-px bg-gradient-to-r from-transparent via-gray-400 to-transparent opacity-40 my-6" />
+       
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center py-8">
           {/* Name and Tagline */}
@@ -43,7 +43,7 @@ const Footer = () => {
               <h3 className="text-lg font-medium mb-3 text-white">General</h3>
               <ul className="space-y-2">
                 <li><Link href="/" className="text-gray-400 hover:text-white transition-colors">Home</Link></li>
-                <li><Link href="/projects" className="text-gray-400 hover:text-white transition-colors">Projects</Link></li>
+                <li><Link href="#projects" className="text-gray-400 hover:text-white transition-colors">Projects</Link></li>
                 <li>
                   <SocialLinksModal className="p-0 text-left text-gray-400 hover:text-white transition-colors">
                     <span>Blog</span>

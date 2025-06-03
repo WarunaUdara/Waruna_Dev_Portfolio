@@ -13,31 +13,8 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { DynamicIconCloud } from "./DynamicIconCloud";
 import { Globe } from "./magicui/Globe";
 import BlurText from "./ui/BlurText";
-
-// Define the tech stack icons to use in the cloud
-const techIcons = [
-  "/icons8-java-144.png",
-  "/icons8-spring-boot-48.png",
-  "/icons8-python-144.png", 
-  "/icons8-javascript-144.png",
-  "/ts.png",
-  "/icons8-react-24.png",
-  "/icons8-nextjs-144.png",
-  "/icons8-angular-96.png",
-  "/icons8-tailwind-css-144.png",
-  "/icons8-postgresql-96.png",
-  "/icons8-mysql-144.png",
-  "/icons8-docker-144.png",
-  "/aws.png",
-  "/icons8-git-144.png",
-  "/icons8-github-50.png",
-  "/hibernate.png",
-  "/icons8-vs-code-96.png",
-  "/icons8-intellij-idea-96.png",
-];
 
 export function BentoGridImpl() {
   return (
@@ -63,34 +40,124 @@ export function BentoGridImpl() {
 }
 
 const TechStackCloud = () => {
-  return (
-    <div 
-      className="flex flex-col w-full h-full overflow-hidden relative cursor-pointer min-h-[230px] bg-gradient-to-br from-blue-50/5 to-purple-100/5 dark:from-blue-900/10 dark:to-purple-900/10"
-    >
-      <div className="absolute inset-0 flex items-center justify-center">
-        <DynamicIconCloud images={techIcons} />
-      </div>
-      
-      {/* Content shown on hover - removed pointer-events-none from parent container */}
-      <div className="absolute inset-0 opacity-0 group-hover/bento:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-end p-4">
-        <div 
-          className="bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-full text-sm text-white flex items-center gap-2 mb-3 cursor-pointer transform -translate-y-4 group-hover/bento:translate-y-0 transition-transform duration-300 z-20"
-          onClick={(e) => {
-            e.stopPropagation();
-            document.getElementById('tech-stack')?.scrollIntoView({ behavior: 'smooth' });
+  // Tech stack data organized by categories for different marquee rows
+  const techCategories = {
+    frontend: [
+      { icon: "/icons8-react-24.png", name: "React" },
+      { icon: "/icons8-nextjs-144.png", name: "Next.js" },
+      { icon: "/icons8-javascript-144.png", name: "JavaScript" },
+      { icon: "/ts.png", name: "TypeScript" },
+      { icon: "/icons8-tailwind-css-144.png", name: "Tailwind" },
+      { icon: "/icons8-html5-144.png", name: "HTML5" },
+      { icon: "/icons8-css3-144.png", name: "CSS3" },
+      { icon: "/icons8-angular-96.png", name: "Angular" },
+    ],
+    backend: [
+      { icon: "/icons8-java-144.png", name: "Java" },
+      { icon: "/icons8-python-144.png", name: "Python" },
+      { icon: "/icons8-nodejs-144.png", name: "Node.js" },
+      { icon: "/icons8-spring-boot-48.png", name: "Spring" },
+      { icon: "/icons8-postgresql-96.png", name: "PostgreSQL" },
+      { icon: "/icons8-mysql-144.png", name: "MySQL" },
+      { icon: "/icons8-mongo-db-96.png", name: "MongoDB" },
+      { icon: "/icons8-apache-kafka-64.png", name: "Kafka" },
+    ],
+    tools: [
+      { icon: "/icons8-docker-144.png", name: "Docker" },
+      { icon: "/aws.png", name: "AWS" },
+      { icon: "/icons8-git-144.png", name: "Git" },
+      { icon: "/icons8-github-50.png", name: "GitHub" },
+      { icon: "/icons8-vs-code-96.png", name: "VS Code" },
+      { icon: "/vercel.png", name: "Vercel" },
+      { icon: "/icons8-postman-inc-96.png", name: "Postman" },
+      { icon: "/icons8-figma-96.png", name: "Figma" },
+    ]
+  };
+
+  const MarqueeRow = ({ 
+    items, 
+    direction = "left", 
+    speed = 40,
+    className = ""
+  }: {
+    items: { icon: string; name: string }[];
+    direction?: "left" | "right";
+    speed?: number;
+    className?: string;
+  }) => {
+    // Duplicate items for seamless loop
+    const duplicatedItems = [...items, ...items];
+    
+    return (
+      <div className={`flex overflow-hidden ${className}`}>
+        <motion.div
+          className="flex gap-3 will-change-transform"
+          animate={{
+            x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
+          }}
+          transition={{
+            duration: speed,
+            repeat: Infinity,
+            ease: "linear",
           }}
         >
-          <span>View Tech Stack</span>
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            className="h-4 w-4" 
-            viewBox="0 0 20 20" 
-            fill="currentColor"
-          >
-            <path fillRule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clipRule="evenodd" />
-          </svg>
-        </div>
+          {duplicatedItems.map((tech, index) => (
+            <div
+              key={`${tech.name}-${index}`}
+              className="flex items-center gap-2 bg-zinc-900/60 backdrop-blur-sm border border-zinc-700/40 rounded-full px-3 py-1.5 flex-shrink-0 hover:bg-zinc-800/60 transition-all duration-300 shadow-sm"
+            >
+              <div className="w-4 h-4 relative flex-shrink-0">
+                <Image
+                  src={tech.icon}
+                  alt={tech.name}
+                  width={16}
+                  height={16}
+                  className="object-contain"
+                />
+              </div>
+              <span className="text-xs text-gray-200 font-medium whitespace-nowrap">
+                {tech.name}
+              </span>
+            </div>
+          ))}
+        </motion.div>
       </div>
+    );
+  };  return (
+    <div className="flex flex-col w-full h-full overflow-hidden relative min-h-[280px] bg-gradient-to-br from-slate-900/60 via-blue-950/40 to-purple-950/40">
+      {/* Subtle gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5"></div>
+      
+      {/* Three marquee rows - positioned in the middle */}
+      <div className="flex-1 flex flex-col justify-center gap-4 py-8">
+        {/* Row 1 - Frontend */}
+        <MarqueeRow 
+          items={techCategories.frontend} 
+          direction="right" 
+          speed={50}
+          className="opacity-85"
+        />
+        
+        {/* Row 2 - Backend */}
+        <MarqueeRow 
+          items={techCategories.backend} 
+          direction="left" 
+          speed={42}
+          className="opacity-90"
+        />
+        
+        {/* Row 3 - Tools */}
+        <MarqueeRow 
+          items={techCategories.tools} 
+          direction="right" 
+          speed={46}
+          className="opacity-85"
+        />
+      </div>
+
+      {/* Subtle corner accents */}
+      <div className="absolute top-3 left-3 w-6 h-6 border-l-2 border-t-2 border-blue-400/20 rounded-tl-lg"></div>
+      <div className="absolute bottom-3 right-3 w-6 h-6 border-r-2 border-b-2 border-purple-400/20 rounded-br-lg"></div>
     </div>
   );
 };
@@ -117,9 +184,7 @@ const InteractiveGlobe = () => {
               <Globe />
             </div>
           </div>
-        </div>
-
-        {/* Bottom location indicator - improved positioning and spacing for mobile */}
+        </div>        {/* Bottom location indicator - improved positioning and spacing for mobile */}
         <div className="absolute bottom-1 left-1 sm:bottom-3 sm:left-3 z-30 flex flex-col max-w-[120px] sm:max-w-none">
           <div className="flex items-center gap-1 mb-1">
             <div className="bg-black/40 backdrop-blur-md rounded-full p-1 flex items-center gap-1">
@@ -132,12 +197,6 @@ const InteractiveGlobe = () => {
           <div className="bg-black/40 backdrop-blur-md rounded-lg px-2 py-1 mb-1">
             <h4 className="text-gray-100 text-xs sm:text-sm font-medium">Sri Lanka</h4>
           </div>
-          <div className="bg-black/40 hover:bg-black/50 backdrop-blur-md rounded-lg px-2 py-1 cursor-pointer transition-colors flex items-center gap-1">
-            <span className="text-blue-400 text-[10px] sm:text-xs">Connect now</span>
-            <svg className="w-2 h-2 sm:w-3 sm:h-3 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-            </svg>
-          </div>
         </div>
       </div>
     </div>
@@ -146,7 +205,9 @@ const InteractiveGlobe = () => {
 
 const BlogShowcase = () => {
   return (
-    <div className="flex flex-col w-full h-full rounded-3xl overflow-hidden relative bg-gradient-to-br from-gray-900/70 to-gray-800/70">
+    <div 
+      className="flex flex-col w-full h-full rounded-3xl overflow-hidden relative bg-gradient-to-br from-gray-900/70 to-gray-800/70 transition-transform duration-300 hover:scale-[1.02]"
+    >
       <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
         <div className="relative w-full h-full flex items-center justify-center p-6">
           {/* Medium logo overlay */}
@@ -155,25 +216,11 @@ const BlogShowcase = () => {
               <path d="M588.67 296.36c0 163.67-131.78 296.35-294.33 296.35S0 460 0 296.36 131.78 0 294.34 0s294.33 132.69 294.33 296.36M911.56 296.36c0 154.06-65.89 279-147.17 279s-147.17-124.94-147.17-279 65.88-279 147.16-279 147.17 124.9 147.17 279M1043.63 296.36c0 138-23.17 249.94-51.76 249.94s-51.75-111.91-51.75-249.94 23.17-249.94 51.75-249.94 51.76 111.9 51.76 249.94"></path>
             </svg>
           </div>
-          
           <div className="relative z-10 flex flex-col items-center text-center">
             <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">My Blog</h3>
             <p className="text-sm text-gray-200 mb-6 max-w-sm">
               Thoughts, tutorials, and insights on software development and tech innovation
             </p>
-            
-            <a 
-              href="https://medium.com/@warunaudarasampath" 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="bg-white hover:bg-gray-100 text-gray-800 px-6 py-3 rounded-full font-medium flex items-center gap-2 transition-colors duration-300"
-            >
-              <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M13 12h7l-4 4m0-8l4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M14 12H4" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-              <span>Read on Medium</span>
-            </a>
           </div>
         </div>
       </div>
@@ -192,36 +239,14 @@ const ProjectShowcase = () => {
             fill
             className="object-cover absolute inset-0 opacity-30 hover:opacity-50 transition-opacity duration-300"
           />
-          
-          {/* Content container with improved structure */}
-          <div className="relative z-10 flex flex-col justify-between h-full w-full">
-            {/* Title and description at the top */}
-            <div className="bg-black/40 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-white/10 max-w-xs mx-auto mt-8">
+            {/* Content container with improved structure */}
+          <div className="relative z-10 flex flex-col justify-center h-full w-full">
+            {/* Title and description centered */}
+            <div className="bg-black/40 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-white/10 max-w-xs mx-auto">
               <h3 className="text-xl font-medium text-white mb-2">Recent Projects</h3>
               <p className="text-sm text-gray-200">
                 Explore my portfolio of web and application development projects
               </p>
-            </div>
-            
-            {/* Buttons positioned at the bottom but move up on hover */}
-            <div className="w-full flex justify-center">
-              <div className="flex gap-3 mt-auto mb-6 transform translate-y-4 group-hover/bento:translate-y-[-16px] transition-transform duration-300">
-                <a 
-                  href="https://github.com/WarunaUdara" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="bg-white/10 hover:bg-white/20 text-white text-xs rounded-full px-3 py-1.5 flex items-center gap-1"
-                >
-                  <IconBrandGithub className="w-4 h-4" />
-                  <span>GitHub</span>
-                </a>
-                <button 
-                  onClick={() => document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' })}
-                  className="bg-blue-500/80 hover:bg-blue-500 text-white text-xs rounded-full px-3 py-1.5"
-                >
-                  View All
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -229,7 +254,6 @@ const ProjectShowcase = () => {
     </div>
   );
 };
-
 const items = [
   {
     title: "Tech Enthusiast",
@@ -276,3 +300,4 @@ const items = [
     icon: <IconTableColumn className="h-4 w-4 text-white/80" />,
   }
 ];
+

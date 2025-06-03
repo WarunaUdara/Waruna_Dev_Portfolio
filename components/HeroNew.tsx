@@ -56,19 +56,13 @@ const HeroNew = () => {
             <span className="bg-clip-text text-transparent bg-gradient-to-tl from-slate-50 to-slate-400">
               Hello, I&apos;m Waruna Udara a Full Stack Developer
             </span>
-          </div>
-
-          {/* Let's Connect button with StarBorder component and Magnet effect */}
+          </div>          {/* Let's Connect button with StarBorder component and Magnet effect */}
           <div className="mt-12 flex space-x-4 justify-center">
-            <Magnet
-              padding={40}
-              magnetStrength={10}
-              activeTransition="transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1.0)"
-            >
+            
               <Link href="#contact">
                 <StarBorder
                   as="div"
-                  color="#4338ca"
+              
                   speed="6s"
                   className="cursor-pointer transition-transform duration-300"
                 >
@@ -91,7 +85,8 @@ const HeroNew = () => {
                   </div>
                 </StarBorder>
               </Link>
-            </Magnet>
+            
+            
 
             <Magnet
               padding={40}
@@ -101,7 +96,7 @@ const HeroNew = () => {
               <Link href="/Waruna Udara Sampath - Resume.pdf" download>
                 <StarBorder
                   as="div"
-                  color="#ca4338"
+                  color="#4338ca"
                   speed="6s"
                   className="cursor-pointer transition-transform duration-300"
                 >

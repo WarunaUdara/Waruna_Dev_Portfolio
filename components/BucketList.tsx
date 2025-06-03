@@ -44,7 +44,7 @@ export default function BucketList() {
       date: "Before December 2025"
     },
     {
-      task: "Parents full health checkup",
+      task: "Parents trip to india",
       completed: false,
     },
     {
@@ -74,7 +74,7 @@ export default function BucketList() {
       completed: true
     },
     {
-      task: "Car",
+      task: "Sport Car",
       completed: false
     },
   ];

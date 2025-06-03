@@ -2,7 +2,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Aurora from "./ui/Aurora";
 import { motion } from "framer-motion";
 
 const About = () => {
@@ -14,15 +13,7 @@ const About = () => {
       {/* Dark background for the about section */}
       <div className="absolute inset-0 bg-black z-0"></div>
 
-      {/* Aurora effect in the background with purple tones */}
-      <div className="absolute inset-0 z-1 opacity-80">
-        <Aurora
-          colorStops={["#4c0080", "#7928ca", "#4c0080"]}
-          blend={0.3}
-          amplitude={0.8}
-          speed={0.2}
-        />
-      </div>
+      
 
       {/* Content container */}
       <div className="container mx-auto px-4 sm:px-8 relative z-10">
