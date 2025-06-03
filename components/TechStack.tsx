@@ -57,34 +57,12 @@ const categories = [
 
 export function TechStack() {
   const sectionRef = useRef(null);
-  
-  // Track when the section is in view
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        // We're tracking the section but not using sectionInView state anymore
-        // Just need the observer to trigger animations when in view
-      },
-      { threshold: 0.1, rootMargin: "100px" }
-    );
-    
-    const currentRef = sectionRef.current;
-    
-    if (currentRef) {
-      observer.observe(currentRef);
-    }
-    
-    return () => {
-      if (currentRef) {
-        observer.unobserve(currentRef);
-      }
-    };
-  }, []);
+  // Removed the unused useEffect hook
 
   return (
     <section 
       id="tech-stack" 
-      ref={sectionRef} 
+      ref={sectionRef} // sectionRef is kept as it might be used for other purposes like navigation
       className="py-16 md:py-20 relative overflow-hidden bg-black"
     >
       {/* Subtle gradient background */}
@@ -122,13 +100,15 @@ export function TechStack() {
         </div>
         
         {/* Tech stack items in dark pill format similar to the image */}
-        <div className="flex flex-col gap-3 items-center justify-center max-w-4xl mx-auto">
+        <div className="flex flex-col gap-3 items-center justify-center max-w-4xl mx-auto" style={{ perspective: '1000px' }}>
           {categories.map((category, categoryIndex) => (
             <motion.div 
               key={categoryIndex} 
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.1 * categoryIndex }}
+              // Animation for category rows can be kept or simplified if individual items have complex animations
+              initial={{ opacity: 0, y: 10 }} // Keeping row animation for now
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.4, delay: 0.05 * categoryIndex, ease: "easeInOut" }}
               className="flex flex-wrap gap-2 justify-center"
             >
               {category.map((tech, techIndex) => {
@@ -140,9 +120,14 @@ export function TechStack() {
                   <motion.div
                     key={techIndex}
                     className="bg-zinc-900/80 border border-zinc-800 rounded-full px-4 py-1.5 flex items-center gap-2 hover:border-zinc-700 transition-all duration-300"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.2, delay: 0.05 * (techIndex + categoryIndex) }}
+                    initial={{ opacity: 0, rotateY: -90, scale: 0.9 }}
+                    whileInView={{ opacity: 1, rotateY: 0, scale: 1 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ 
+                      duration: 0.6, 
+                      delay: 0.05 * (techIndex + categoryIndex * 0.5), // Adjusted delay slightly for category rows
+                      ease: "easeInOut" 
+                    }}
                     whileHover={{ scale: 1.05, backgroundColor: "rgba(39, 39, 42, 0.9)" }}
                   >
                     <div className="w-5 h-5 relative flex-shrink-0">

@@ -149,8 +149,7 @@ export function Projects() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [handleScroll]);
 
-  return (    <section id="projects" className="relative w-full py-24" ref={sectionRef}>
-      {/* Black background with Aurora effect */}
+  return (    <section id="projects" className="relative w-full py-24" ref={sectionRef}>      {/* Black background with Aurora effect */}
       <div className="absolute inset-0 bg-black"></div>
 
       <div data-aos="fade-up" data-aos-duration="1000" className="container mx-auto px-4 mb-16 text-center relative" style={{ zIndex: 10 }}>
