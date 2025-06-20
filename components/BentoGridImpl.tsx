@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { cn } from "@/lib/utils";
-import React, { useMemo } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import { BentoGrid, BentoGridItem } from "../components/ui/BentoGrid";
 import {
   IconBrandGithub,
@@ -15,6 +15,37 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Globe } from "./magicui/Globe";
 import BlurText from "./ui/BlurText";
+
+// Custom hook for intersection observer
+const useIntersectionObserver = (options = {}) => {
+  const [isIntersecting, setIsIntersecting] = useState(false);
+  const [hasBeenIntersecting, setHasBeenIntersecting] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsIntersecting(entry.isIntersecting);
+      if (entry.isIntersecting && !hasBeenIntersecting) {
+        setHasBeenIntersecting(true);
+      }
+    }, {
+      threshold: 0.1,
+      rootMargin: '50px',
+      ...options,
+    });
+
+    observer.observe(element);
+
+    return () => {
+      observer.unobserve(element);
+    };
+  }, [hasBeenIntersecting, options]);
+
+  return { ref, isIntersecting, hasBeenIntersecting };
+};
 
 export function BentoGridImpl() {
   return (
@@ -40,6 +71,8 @@ export function BentoGridImpl() {
 }
 
 const TechStackCloud = () => {
+  const { ref, isIntersecting, hasBeenIntersecting } = useIntersectionObserver();
+  
   // Tech stack data organized by categories for different marquee rows
   const techCategories = {
     frontend: [
@@ -78,12 +111,14 @@ const TechStackCloud = () => {
     items, 
     direction = "left", 
     speed = 40,
-    className = ""
+    className = "",
+    shouldAnimate = true
   }: {
     items: { icon: string; name: string }[];
     direction?: "left" | "right";
     speed?: number;
     className?: string;
+    shouldAnimate?: boolean;
   }) => {
     // Duplicate items for seamless loop
     const duplicatedItems = [...items, ...items];
@@ -92,14 +127,14 @@ const TechStackCloud = () => {
       <div className={`flex overflow-hidden ${className}`}>
         <motion.div
           className="flex gap-3 will-change-transform"
-          animate={{
+          animate={shouldAnimate ? {
             x: direction === "left" ? ["0%", "-50%"] : ["-50%", "0%"],
-          }}
-          transition={{
+          } : {}}
+          transition={shouldAnimate ? {
             duration: speed,
             repeat: Infinity,
             ease: "linear",
-          }}
+          } : {}}
         >
           {duplicatedItems.map((tech, index) => (
             <div
@@ -123,37 +158,54 @@ const TechStackCloud = () => {
         </motion.div>
       </div>
     );
-  };  return (
-    <div className="flex flex-col w-full h-full overflow-hidden relative min-h-[280px] bg-gradient-to-br from-slate-900/60 via-blue-950/40 to-purple-950/40">
+  };
+
+  return (
+    <div 
+      ref={ref}
+      className="flex flex-col w-full h-full overflow-hidden relative min-h-[280px] bg-gradient-to-br from-slate-900/60 via-blue-950/40 to-purple-950/40"
+    >
       {/* Subtle gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5"></div>
       
-      {/* Three marquee rows - positioned in the middle */}
-      <div className="flex-1 flex flex-col justify-center gap-4 py-8">
-        {/* Row 1 - Frontend */}
-        <MarqueeRow 
-          items={techCategories.frontend} 
-          direction="right" 
-          speed={50}
-          className="opacity-85"
-        />
-        
-        {/* Row 2 - Backend */}
-        <MarqueeRow 
-          items={techCategories.backend} 
-          direction="left" 
-          speed={42}
-          className="opacity-90"
-        />
-        
-        {/* Row 3 - Tools */}
-        <MarqueeRow 
-          items={techCategories.tools} 
-          direction="right" 
-          speed={46}
-          className="opacity-85"
-        />
-      </div>
+      {/* Only render animated marquees when in view */}
+      {hasBeenIntersecting && (
+        <div className="flex-1 flex flex-col justify-center gap-4 py-8">
+          {/* Row 1 - Frontend */}
+          <MarqueeRow 
+            items={techCategories.frontend} 
+            direction="right" 
+            speed={50}
+            className="opacity-85"
+            shouldAnimate={isIntersecting}
+          />
+          
+          {/* Row 2 - Backend */}
+          <MarqueeRow 
+            items={techCategories.backend} 
+            direction="left" 
+            speed={42}
+            className="opacity-90"
+            shouldAnimate={isIntersecting}
+          />
+          
+          {/* Row 3 - Tools */}
+          <MarqueeRow 
+            items={techCategories.tools} 
+            direction="right" 
+            speed={46}
+            className="opacity-85"
+            shouldAnimate={isIntersecting}
+          />
+        </div>
+      )}
+
+      {/* Show placeholder when not yet intersected */}
+      {!hasBeenIntersecting && (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-gray-400 text-sm">Loading tech stack...</div>
+        </div>
+      )}
 
       {/* Subtle corner accents */}
       <div className="absolute top-3 left-3 w-6 h-6 border-l-2 border-t-2 border-blue-400/20 rounded-tl-lg"></div>
@@ -163,8 +215,13 @@ const TechStackCloud = () => {
 };
 
 const InteractiveGlobe = () => {
+  const { ref, isIntersecting, hasBeenIntersecting } = useIntersectionObserver();
+
   return (
-    <div className="flex flex-col w-full h-full rounded-3xl overflow-hidden relative bg-gradient-to-b from-blue-950/40 via-blue-900/30 to-black/60">
+    <div 
+      ref={ref}
+      className="flex flex-col w-full h-full rounded-3xl overflow-hidden relative bg-gradient-to-b from-blue-950/40 via-blue-900/30 to-black/60"
+    >
       {/* Container with proper aspect ratio for all device sizes */}
       <div className="pb-[100%] w-full relative">
         {/* Top text overlay - improved mobile spacing with better background for readability */}
@@ -179,12 +236,23 @@ const InteractiveGlobe = () => {
         {/* Improved globe container with better overflow handling */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
-            {/* Added padding to prevent globe edges from showing */}
-            <div className="absolute inset-[-20%] sm:inset-[-10%] flex items-center justify-center">
-              <Globe />
-            </div>
+            {/* Only render Globe when component has been intersecting */}
+            {hasBeenIntersecting && (
+              <div className="absolute inset-[-20%] sm:inset-[-10%] flex items-center justify-center">
+                <Globe />
+              </div>
+            )}
+            
+            {/* Show placeholder when not yet intersected */}
+            {!hasBeenIntersecting && (
+              <div className="flex items-center justify-center w-32 h-32 rounded-full bg-blue-500/20 backdrop-blur-sm border border-blue-400/30">
+                <div className="text-blue-300 text-sm">🌍</div>
+              </div>
+            )}
           </div>
-        </div>        {/* Bottom location indicator - improved positioning and spacing for mobile */}
+        </div>
+
+        {/* Bottom location indicator - improved positioning and spacing for mobile */}
         <div className="absolute bottom-1 left-1 sm:bottom-3 sm:left-3 z-30 flex flex-col max-w-[120px] sm:max-w-none">
           <div className="flex items-center gap-1 mb-1">
             <div className="bg-black/40 backdrop-blur-md rounded-full p-1 flex items-center gap-1">
@@ -239,16 +307,7 @@ const ProjectShowcase = () => {
             fill
             className="object-cover absolute inset-0 opacity-30 hover:opacity-50 transition-opacity duration-300"
           />
-            {/* Content container with improved structure */}
-          <div className="relative z-10 flex flex-col justify-center h-full w-full">
-            {/* Title and description centered */}
-            <div className="bg-black/40 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-white/10 max-w-xs mx-auto">
-              <h3 className="text-xl font-medium text-white mb-2">Recent Projects</h3>
-              <p className="text-sm text-gray-200">
-                Explore my portfolio of web and application development projects
-              </p>
-            </div>
-          </div>
+          
         </div>
       </div>
     </div>

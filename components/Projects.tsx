@@ -64,7 +64,7 @@ const projects = [
     technologies: [
       { name: "Java", icon: "/icons8-java-144.png" }
     ],
-    image: "/globe.svg",
+    image: "/defence-system.png",
     color: "#f97316", // Orange
     bulletPoints: [
       "Observer Design Pattern for real-time updates",
